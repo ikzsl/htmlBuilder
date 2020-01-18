@@ -4,7 +4,7 @@ const field = [
   [null, null, null],
 ];
 
-field[1][2] = null;
+field[1][2] = 'o';
 console.log(field);
 
 
@@ -17,3 +17,4 @@ const check = (field, symbol) => {
   return false;
 };
 
+console.log("TCL: check(field, 'x')", check(field, 'o'))
