@@ -14,22 +14,32 @@ const data = ['html', [
 
 const buildHtml = (data) => {
   let result = '';
-  data.forEach((item, i) => {
+  let body = '';
 
-    console.log('-------');
-    if (item instanceof Array) {
-      if (typeof item[0] === 'string') {
-        result += `<${item[0]}>${result}</${item[0]}>`;
-      }
-      console.log(result);
+  let [tagName, ...lastArgs] = data;
+  console.log(" lastArgs", lastArgs)
 
-      buildHtml(item);
 
+
+  lastArgs.forEach((item, i) => {
+    if (typeof item === 'string') {
+      body = lastArgs;
     }
 
+    if (item instanceof Array) {
+     
+      result += `<${tagName}>${body}${buildHtml(item)}</${tagName}>`;
+      if (!item) {
+        return;
+      }
+      if (item instanceof Object) {
+        return;
+      }
+      // console.log(result);
 
+      // buildHtml(item);
 
-
+    }
 
     // if (typeof item === 'string') {
     //   result += `<${item}>${buildHtml(item)}</${item}>`;
@@ -41,7 +51,8 @@ const buildHtml = (data) => {
 }
 
 
-buildHtml(data);
+// buildHtml(data);
+console.log(buildHtml(data))
 
 // let q = data.shift();
 // console.log("TCL: data", data);
