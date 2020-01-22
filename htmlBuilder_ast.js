@@ -12,6 +12,21 @@
 //   ]],
 // ]];
 
+// const data = ['html', [
+//   ['head', [
+//     ['title', 'hello, hexlet!'],
+//   ]],
+//   ['body', { class: 'container' }, [
+//     ['h1', { class: 'header' }, 'html builder example'],
+//     ['div', [
+//       ['span'],
+//       ['span', { class: 'text', id: 'uniq-key' }],
+//     ]],
+//   ]],
+// ]];
+
+const singleTagsList = new Set(['hr', 'img', 'br']);
+
 const data = ['html', [
   ['head', [
     ['title', 'hello, hexlet!'],
@@ -19,8 +34,8 @@ const data = ['html', [
   ['body', { class: 'container' }, [
     ['h1', { class: 'header' }, 'html builder example'],
     ['div', [
-      ['span'],
-      ['span', { class: 'text', id: 'uniq-key' }],
+      ['span', 'span text2'],
+      ['br'],
     ]],
   ]],
 ]];
@@ -33,7 +48,10 @@ const iterAst = (ast) => {
     case 'tag':
       const attrsLine = Object.keys(ast.options).reduce((acc, key) => `${acc} ${key}="${ast.options[key]}"`, '');
       return `<${ast.name}${attrsLine}>${iterAst(ast.body)}</${ast.name}>`;
-    default:
+    case 'tagSingle' : 
+    const attrsLineSingleTag = Object.keys(ast.options).reduce((acc, key) => `${acc} ${key}="${ast.options[key]}"`, '');
+      return `<${ast.name}${attrsLineSingleTag}>${iterAst(ast.body)}`;
+    default: 
       return ast;
   }
 };
@@ -61,6 +79,12 @@ const iter = (data) => {
   }
 
   const processedBody = body instanceof Array ? iter(body) : body;
+
+  if (singleTagsList.has(data[0]) ) {
+    return {
+      type: 'tagSingle', name: data[0], body: processedBody, options,
+    };
+  }
 
   return {
     type: 'tag', name: data[0], body: processedBody, options,

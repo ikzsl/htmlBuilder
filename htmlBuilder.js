@@ -12,63 +12,62 @@ const data = ['html', [
 ]];
 
 
+// Каждый элемент массива содержит имя свойства
+// и функцию-предикат для определения типа этого свойства.
+const propertyActions = [
+  {
+    name: 'body',
+    check: (arg) => typeof arg === 'string',
+  },
+  {
+    name: 'children',
+    check: (arg) => arg instanceof Array,
+  },
+  {
+    name: 'attributes',
+    check: (arg) => arg instanceof Object,
+  },
+];
+
+// Получаем имя свойства по его типу.
+const getPropertyName = (arg) => {
+  const object = propertyActions.find(({ check }) => check(arg));
+  return object.name;
+};
+
+// Формируем строковое представление аттрибутов тега.
+const buildAttrString = (attrs) => (
+  Object.keys(attrs).map((key) => ` ${key}="${attrs[key]}"`).join('')
+);
+
+// Функция принимает на вход тег.
 const buildHtml = (data) => {
-  let result = '';
-  let body = '';
+  // Получаем имя тега и свойства тега (атрибуты, тело, детей) в виде массива.
+  const [first, ...rest] = data;
 
-  let [tagName, ...lastArgs] = data;
-  console.log(" lastArgs", lastArgs)
+  // Формируем представление тега в виде объекта.
+  const root = {
+    name: first,
+    attributes: {},
+    body: '',
+    children: [],
+  };
 
+  // Обходим свойства тега.
+  const tag = rest
+    .reduce((acc, arg) => {
+      // Получаем имя свойства.
+      const name = getPropertyName(arg);
+      // Добавляем свойство в представление тега.
+      return { ...acc, [name]: arg };
+    }, root);
 
+  // Из представления тега формируем строку,
+  // вызывая рекурсивно функцию buildHtml для каждого ребёнка.
+  return [`<${tag.name}${buildAttrString(tag.attributes)}>`,
+    `${tag.body}${tag.children.map(buildHtml).join('')}`,
+    `</${tag.name}>`,
+  ].join('');
+};
 
-  lastArgs.forEach((item, i) => {
-    if (typeof item === 'string') {
-      body = lastArgs;
-    }
-
-    if (item instanceof Array) {
-     
-      result += `<${tagName}>${body}${buildHtml(item)}</${tagName}>`;
-      if (!item) {
-        return;
-      }
-      if (item instanceof Object) {
-        return;
-      }
-      // console.log(result);
-
-      // buildHtml(item);
-
-    }
-
-    // if (typeof item === 'string') {
-    //   result += `<${item}>${buildHtml(item)}</${item}>`;
-    //   console.log(item, result);
-    // }
-  });
-
-  return result;
-}
-
-
-// buildHtml(data);
-console.log(buildHtml(data))
-
-// let q = data.shift();
-// console.log("TCL: data", data);
-// console.log("TCL: q", Array.from(q).shift())
-
-
-
-// const buildHtml = (data) => {
-//   let result = '';
-//   let item = data.shift();
-//   result += item;
-
-//     if (typeof item === 'string') {
-//       result += `<${item}>${buildHtml(Array.from(item).shift())}</${item}>`;
-//       console.log(item, result);
-//     }
-
-//   return result;
-// }
+console.log(buildHtml(data));
