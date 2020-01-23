@@ -48,10 +48,10 @@ const iterAst = (ast) => {
     case 'tag':
       const attrsLine = Object.keys(ast.options).reduce((acc, key) => `${acc} ${key}="${ast.options[key]}"`, '');
       return `<${ast.name}${attrsLine}>${iterAst(ast.body)}</${ast.name}>`;
-    case 'tagSingle' : 
-    const attrsLineSingleTag = Object.keys(ast.options).reduce((acc, key) => `${acc} ${key}="${ast.options[key]}"`, '');
+    case 'tagSingle':
+      const attrsLineSingleTag = Object.keys(ast.options).reduce((acc, key) => `${acc} ${key}="${ast.options[key]}"`, '');
       return `<${ast.name}${attrsLineSingleTag}>${iterAst(ast.body)}`;
-    default: 
+    default:
       return ast;
   }
 };
@@ -80,7 +80,7 @@ const iter = (data) => {
 
   const processedBody = body instanceof Array ? iter(body) : body;
 
-  if (singleTagsList.has(data[0]) ) {
+  if (singleTagsList.has(data[0])) {
     return {
       type: 'tagSingle', name: data[0], body: processedBody, options,
     };
@@ -96,8 +96,8 @@ const build = (data) => {
   return iterAst(iter(data));
 };
 
-console.info('\x1b[31m','<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m")
+console.info('\x1b[31m', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m")
 console.log("TCL: build -> result", iter(data));
-console.info('\x1b[31m','<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m");
+console.info('\x1b[31m', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m");
 console.log(build(data));
-console.info('\x1b[31m','<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m");
+console.info('\x1b[31m', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', "\x1b[0m");
