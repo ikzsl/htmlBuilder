@@ -1,4 +1,3 @@
-var _ = require('lodash');
 const singleTagsList = new Set(['hr', 'img', 'br']);
 
 const data = ['html', [
@@ -16,12 +15,7 @@ const data = ['html', [
 
 // BEGIN
 const render = (data) => {
-  const {
-    name,
-    attributes,
-    body,
-    children,
-  } = data;
+  const { name, attributes, body, children, } = data;
   const attrsLine = Object.keys(attributes)
     .map((key) => ` ${key}="${attributes[key]}"`).join('');
   const content = children.length > 0 ? children.map(render).join('') : body;
@@ -37,7 +31,7 @@ const propertyActions = [
   {
     name: 'body',
     check: (arg) => typeof arg === 'string',
-    process: _.identity,
+    process: x => x,
   },
   {
     name: 'children',
@@ -47,7 +41,7 @@ const propertyActions = [
   {
     name: 'attributes',
     check: (arg) => arg instanceof Object,
-    process: _.identity,
+    process: x => x,
   },
 ];
 
@@ -67,5 +61,7 @@ const parse = (data) => {
     return { ...acc, [name]: process(arg, parse) };
   }, root);
 };
-
+console.table(parse(data));
+console.dir(parse(data));
+// document.write(parse(data));
 console.log(render(parse(data)));
