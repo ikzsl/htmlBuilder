@@ -25,7 +25,6 @@ class Tree {
   }
 }
 
-
 const tree = new Tree('/');
 tree.addChild('var')
   .addChild('lib')
@@ -42,9 +41,6 @@ console.log(deepChild);
 // tree.addChild('cats');
 // const dogs = tree.getChild('dogs');
 // console.log("TCL: dogs", dogs)
-
-
-
 
 
 // const tree = new Tree('/');
